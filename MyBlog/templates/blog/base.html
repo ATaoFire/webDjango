@@ -1,0 +1,58 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock %}</title>
+{#    <link rel="stylesheet" href="{% static 'bs/css/bootstrap-theme.css' %}">#}
+{#    <link rel="stylesheet" href="{% static 'bs/css/bootstrap.css' %}">#}
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    {%block css%}
+    {%endblock css%}
+</head>
+<body>
+    <script src="{% static 'bs/js/npm.js' %}"></script>
+    <script src="{% static 'bs/js/bootstrap.js' %}"></script>
+    <link rel="icon" href="{% static 'images/logo.icon' %}" type="image/x-icon">
+    {% block js %}
+    {% endblock js%}
+
+    <header class="header-navigation" id="header">
+        <nav>
+            <div class="logo"><a href="/blog/post_list/">个人博客</a></div>
+            <ul id="starlist">
+                <li><a href="/blog/post_list/">首页</a></li>
+                <li ><a href="/study/">学无止境</a></li>
+                <li ><a href="/time/">时间轴</a></li>
+                <li ><a href="/about/">外部链接</a></li>
+                <li ><a href="/about/">关于我</a></li>
+                <li ><a href="/e/tool/gbook/?bid=1">留言</a></li>
+              </ul>
+        <div class="searchbox">
+            <div id="search_bar" class="search_bar">
+                <form  id="searchform" action="/e/search/index.php" method="post" name="searchform">
+                    <input class="input" placeholder="想搜点什么呢.." type="text" name="keyboard" id="keyboard">
+                    <input type="hidden" name="show" value="title" />
+                    <input type="hidden" name="tempid" value="1" />
+                    <input type="hidden" name="tbname" value="news">
+                    <input type="hidden" name="Submit" value="搜索" />
+                    <p class="search_ico"> <span></span></p>
+            </form>
+            </div>
+        </div>
+    </nav>
+</header>
+    <div id="content-nav" style="margin: 0px; padding: 200px">
+        {% block content %}
+
+        {% endblock %}
+    </div>
+    <footer>
+        <p>Design by <a href="/blog/post_list/">个人博客</a></p>
+    </footer>
+    <a href="#" class="cd-top">Top</a>
+</body>
+</html>
+
+
+
