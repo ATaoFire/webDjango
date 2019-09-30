@@ -3,54 +3,88 @@
 <html>
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% block title %}{% endblock %}</title>
-{#    <link rel="stylesheet" href="{% static 'bs/css/bootstrap-theme.css' %}">#}
-{#    <link rel="stylesheet" href="{% static 'bs/css/bootstrap.css' %}">#}
-    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+{#    <link rel="stylesheet" href="{% static 'bootstrap-4.3.1-dist/css/bootstrap.min.css' %}">#}
+{#    <script src="https://cdn.staticfile.org/popper.js/1.15.0/umd/popper.min.js"></script>#}
+{#    <script src="{% static 'bootstrap-4.3.1-dist/js/bootstrap.min.js' %}"></script>#}
     {%block css%}
-    {%endblock css%}
+    {%endblock %}
 </head>
 <body>
-    <script src="{% static 'bs/js/npm.js' %}"></script>
-    <script src="{% static 'bs/js/bootstrap.js' %}"></script>
-    <link rel="icon" href="{% static 'images/logo.icon' %}" type="image/x-icon">
+{#    <script src="{% static 'jquery-3.4.1/jquery-3.4.1.js' %}"></script>#}
     {% block js %}
-    {% endblock js%}
-
-    <header class="header-navigation" id="header">
-        <nav>
-            <div class="logo"><a href="/blog/post_list/">个人博客</a></div>
-            <ul id="starlist">
-                <li><a href="/blog/post_list/">首页</a></li>
-                <li ><a href="/study/">学无止境</a></li>
-                <li ><a href="/time/">时间轴</a></li>
-                <li ><a href="/about/">外部链接</a></li>
-                <li ><a href="/about/">关于我</a></li>
-                <li ><a href="/e/tool/gbook/?bid=1">留言</a></li>
-              </ul>
-        <div class="searchbox">
-            <div id="search_bar" class="search_bar">
-                <form  id="searchform" action="/e/search/index.php" method="post" name="searchform">
-                    <input class="input" placeholder="想搜点什么呢.." type="text" name="keyboard" id="keyboard">
-                    <input type="hidden" name="show" value="title" />
-                    <input type="hidden" name="tempid" value="1" />
-                    <input type="hidden" name="tbname" value="news">
-                    <input type="hidden" name="Submit" value="搜索" />
-                    <p class="search_ico"> <span></span></p>
-            </form>
-            </div>
-        </div>
+    {% endblock %}
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+        <!-- Brand -->
+        <a class="navbar-brand" href="/blog/home/">MyBlog</a>
+        <!-- Links -->
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="/blog/home/">首页</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">技术</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">关于</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">更多</a>
+            </li>
+            <!-- Dropdown -->
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+                    个人信息
+                </a>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="#">主页</a>
+                    <a class="dropdown-item" href="#">技术</a>
+                    <a class="dropdown-item" href="#">关于</a>
+                    <a class="dropdown-item" href="#">更多</a>
+                </div>
+            </li>
+            {% if request.session.is_login %}
+                <li class="nav-item">
+                    <a class="nav-link" href="#">当前在线：{{ request.session.user_username }}</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/blog/logout/">登出</a>
+                </li>
+            {% else %}
+                <li class="nav-item">
+                    <a href="/blog/login/">登录</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/blog/register/">注册</a>
+                </li>
+            {% endif %}
+        </ul>
+        <ul class="navbar-nav">
+            {% if request.session.is_login %}
+                <li class="nav-item">
+                    <a class="nav-link" href="#">当前在线：{{ request.session.user_username }}</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/blog/logout/">登出</a>
+                </li>
+            {% else %}
+                <li class="nav-item">
+                    <a href="/blog/login/">登录</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/blog/register/">注册</a>
+                </li>
+            {% endif %}
+        </ul>
     </nav>
-</header>
-    <div id="content-nav" style="margin: 0px; padding: 200px">
-        {% block content %}
 
-        {% endblock %}
-    </div>
-    <footer>
-        <p>Design by <a href="/blog/post_list/">个人博客</a></p>
-    </footer>
-    <a href="#" class="cd-top">Top</a>
+    {% block content %}{% endblock %}
+
 </body>
 </html>
 

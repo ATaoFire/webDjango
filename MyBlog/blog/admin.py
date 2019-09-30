@@ -1,9 +1,13 @@
 from django.contrib import admin
-from .models import Post
+from .models import Post, User, Banner, BlogCategory,Tags
 
 
 # admin页面普通展示
-# admin.site.register(Post)
+admin.site.register(User)
+admin.site.register(Banner)
+admin.site.register(BlogCategory)
+admin.site.register(Tags)
+
 
 # admin页面定制展示
 @admin.register(Post)

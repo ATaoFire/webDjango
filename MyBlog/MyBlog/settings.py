@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'blog.apps.BlogConfig'
+    'blog.apps.BlogConfig',
+    'captcha'
 ]
 
 MIDDLEWARE = [
@@ -125,5 +126,23 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'), #在当前目录下的static文件夹
 ]
+#媒体
+MEDIA_ROOT= os.path.join(BASE_DIR,'media')
+MEDIA_URL = '/media/'
+
+# 字母验证码
+CAPTCHA_IMAGE_SIZE = (80, 30)  # 设置 captcha 图片大小
+CAPTCHA_LENGTH = 4  # 字符个数
+CAPTCHA_TIMEOUT = 1  # 超时(minutes)
+
+# # 加减乘除验证码
+# CAPTCHA_OUTPUT_FORMAT = '%(image)s %(text_field)s %(hidden_field)s '
+# CAPTCHA_NOISE_FUNCTIONS = ('captcha.helpers.noise_null',
+#                            'captcha.helpers.noise_arcs',  # 线
+#                            'captcha.helpers.noise_dots',  # 点
+#                            )
+# CAPTCHA_CHALLENGE_FUNCT = 'captcha.helpers.random_char_challenge'
+# CAPTCHA_CHALLENGE_FUNCT = 'captcha.helpers.math_challenge'
+# CAPTCHA_TIMEOUT = 1
 
 
