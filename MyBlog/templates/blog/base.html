@@ -50,41 +50,22 @@
             </li>
             {% if request.session.is_login %}
                 <li class="nav-item">
-                    <a class="nav-link" href="#">当前在线：{{ request.session.user_username }}</a>
+                    <a class="nav-link" href="/blog/home/">当前在线：{{ request.session.user_username }}</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/blog/logout/">登出</a>
                 </li>
             {% else %}
                 <li class="nav-item">
-                    <a href="/blog/login/">登录</a>
+                    <a class="nav-link" href="/blog/login/">登录</a>
                 </li>
                 <li class="nav-item">
-                    <a href="/blog/register/">注册</a>
-                </li>
-            {% endif %}
-        </ul>
-        <ul class="navbar-nav">
-            {% if request.session.is_login %}
-                <li class="nav-item">
-                    <a class="nav-link" href="#">当前在线：{{ request.session.user_username }}</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/blog/logout/">登出</a>
-                </li>
-            {% else %}
-                <li class="nav-item">
-                    <a href="/blog/login/">登录</a>
-                </li>
-                <li class="nav-item">
-                    <a href="/blog/register/">注册</a>
+                    <a class="nav-link" href="/blog/register/">注册</a>
                 </li>
             {% endif %}
         </ul>
     </nav>
-
     {% block content %}{% endblock %}
-
 </body>
 </html>
 

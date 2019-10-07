@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Post, User, Banner, BlogCategory, FriendlyLink
+from .models import Post, User, Banner, BlogCategory, FriendlyLink, Tags
 from .forms import UserForm, RegisterForm
 import hashlib
 #实现搜索
@@ -98,18 +98,18 @@ def logout(request):
 #首页
 def home(request):
     banner_list = Banner.objects.all()
-    # recommend_list = Post.objects.filter(recommend=1)
-    # post_list = Post.objects.all().exclude(status__regex='draft')
-    # blogcategory_list = BlogCategory.objects.all()
-    # friendlylink_list = FriendlyLink.objects.all()
+    recommend_list = Post.objects.filter(recommend=1)
+    post_list = Post.objects.all().exclude(status__regex='draft')
+    blogcategory_list = BlogCategory.objects.all()
+    friendlylink_list = FriendlyLink.objects.all()
     contents = {
         'banner_list': banner_list,
-        # 'recommend_list': recommend_list,
-        # 'post_list': post_list,
-        # 'blogcategory_list':blogcategory_list,
-        # 'friendlylink_list':friendlylink_list,
+        'recommend_list': recommend_list,
+        'post_list': post_list,
+        'blogcategory_list': blogcategory_list,
+        'friendlylink_list': friendlylink_list,
     }
-    return render(request, 'blog/post/home.html', {'banner_list': banner_list})
+    return render(request, 'blog/post/home.html', contents)
 
 def post_detail(request, year, month, day, post):
     post = get_object_or_404(Post,
@@ -154,10 +154,10 @@ def blog_list(request, cid = -1):
 
     tags = Tags.objects.all()
     tag_message_list = []
-    for t in tags:
-        count = len(t.post_set.all())
-        tm = TagMessage(t.id, t.name, count)
-        tag_message_list.append(tm)
+    # for t in tags:
+    #     count = len(t.post_set.all())
+    #     tm = TagMessage(t.id, t.name, count)
+    #     tag_message_list.append(tm)
 
     ctx = {
         'post_list': post_list,

@@ -2,71 +2,103 @@
 {% load static %}
 {% block title %}首页{% endblock %}
 
+{% block css %}
+    <style>
+    #banner-div{
+        padding: 10px;
+        margin:0 auto;
+        width:90%;
+    }
+    /* Make the image fully responsive */
+    .carousel-inner img {
+        width: 100%;
+        height: 100%;
+    }
+  </style>
+
+{% endblock %}
 {% block content %}
-
-    {#    设置自动播放：data-ride=“carousel”#}
+     {#    设置自动播放：data-ride=“carousel”#}
     {#    设置播放的时间间隔（这里设置的时间间隔是2000毫秒）：data-interval=“2000”#}
-    <div id="demo" class="carousel slide" data-ride="carousel">
-        <!-- 指示符 -->
-        <ul class="carousel-indicators">
-            {% for banner in banner_list %}
-                {% if banner.is_active %}
-                    <li data-target="#demo" data-slide-to="{{ banner.idx }}" class="active"></li>
-                {% else %}
-                    <li data-target="#demo" data-slide-to="{{ banner.idx }}"></li>
-                {%  endif %}
-            {% endfor %}
-        </ul>
-        <!-- 轮播图片 -->
-        <div class="carousel-inner">
-            {% for banner in banner_list %}
-                {% if banner.is_active %}
-                    <div class="carousel-item active">
-                        <img src="/media/{{banner.cover}}" alt="{{banner.title}}">
-                        <div class="carousel-caption">
-                            <p>{{banner.title}}</p>
+
+    <div id="banner-div">
+        <div id="demo" class="carousel slide" data-ride="carousel">
+            <!-- 指示符 -->
+            <ul class="carousel-indicators">
+                {% for banner in banner_list %}
+                    {% if banner.is_active %}
+                        <li data-target="#demo" data-slide-to="{{ banner.idx }}" class="active"></li>
+                    {% else %}
+                        <li data-target="#demo" data-slide-to="{{ banner.idx }}"></li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+            <!-- 轮播图片 -->
+            <div class="carousel-inner">
+                {% for banner in banner_list %}
+                    {% if banner.is_active %}
+                        <div class="carousel-item active">
+                            <img src="/media/{{banner.cover}}">
+                            <div class="carousel-caption">
+                                <p>{{banner.title}}!</p>
+                            </div>
                         </div>
-                    </div>
-                {% else %}
-                    <div class="carousel-item">
-                        <img src="/media/{{banner.cover}}" alt="{{banner.title}}">
-                        <div class="carousel-caption">
-                            <p>{{banner.title}}</p>
+                    {% else %}
+                        <div class="carousel-item">
+                            <img src="/media/{{banner.cover}}">
+                            <div class="carousel-caption">
+                                <p>{{banner.title}}!</p>
+                            </div>
                         </div>
-                    </div>
-                {%  endif %}
-            {% endfor %}
+                    {% endif %}
+                {% endfor %}
+            </div>
+            <!-- 左右切换按钮 -->
+            <a class="carousel-control-prev" href="#demo" data-slide="prev">
+                <span class="carousel-control-prev-icon"></span>
+            </a>
+            <a class="carousel-control-next" href="#demo" data-slide="next">
+                <span class="carousel-control-next-icon"></span>
+            </a>
         </div>
-
-        <!-- 左右切换按钮 -->
-        <a class="carousel-control-prev" href="#demo" data-slide="prev">
-            <span class="carousel-control-prev-icon"></span>
-        </a>
-        <a class="carousel-control-next" href="#demo" data-slide="next">
-            <span class="carousel-control-next-icon"></span>
-        </a>
     </div>
-
     <!-- 推荐开始 -->
-  {% for post in recommend_list %}  <article class="excerpt-minic excerpt-minic-index">
-        <h2><span class="red">【推荐】</span><a target="_blank" href="/blog/{{post.id}}/" title="{{post.title}}" >{{post.title}}</a>
-        </h2>
+    {% for post in recommend_list %}
+        <article class="excerpt-minic excerpt-minic-index">
+            <div>
+                <span class="red">【推荐】</span>
+                <a target="_blank" href="/blog/{{post.id}}/" title="{{post.title}}" >{{post.title}}</a>
+            </div>
+
         <p class="note">{{post.content}}</p>
-    </article>
-  {% endfor %}  <!-- 推荐结束 -->
+        </article>
+    {% endfor %}
+    <!-- 推荐结束 -->
     <!-- 最新发布的博客开始 -->
+    {% for post in post_list %}
+        <div class="container">
+            <h3>{{ post.title }}</h3>
+            <p>作者：{{ post.author }}</p>
+            <a class="focus" href="#" target="_blank" >
+                <img class="thumb" data-original="/{{post.cover}}" src="/{{post.cover}}"  style="display: inline;">
+                  <img src="https://static.runoob.com/images/mix/paris.jpg" class="float-center">
 
-  {% for post in post_list%}
-
-  <article class="excerpt excerpt-1" style="">
-  <a class="focus" href="/blog/{{post.id}}/" title="{{post.title}}" target="_blank" ><img class="thumb" data-original="/{{post.cover}}" src="/{{post.cover}}" alt="{{post.title}}"  style="display: inline;"></a>
-        <header><a class="cat" href="#" title="{{post.category.name}}" >{{post.category.name}}<i></i></a>
-            <h2><a href="/blog/{{post.id}}/" title="{{post.title}}" target="_blank" >{{post.title}}</a>
-            </h2>
-        </header>
+            </a>
+            <blockquote class="blockquote">
+                <p>{{ post.body }}</p>
+                <a class="cat" href="#" title="{{post.category.name}}">
+                    {{post.category.name}}
+                </a>
+            </blockquote>
+        </div>
         <p class="meta">
             <time class="time"><i class="glyphicon glyphicon-time"></i>{{post.pub_date|date:'Y-m-d'}}</time>
-            <span class="views"><i class="glyphicon glyphicon-eye-open"></i>{{post.views}}</span> <a class="comment" href="##comment" title="评论" target="_blank" ><i class="glyphicon glyphicon-comment"></i>{{post.comment_set.count}}</a>
+            <span class="views"><i class="glyphicon glyphicon-eye-open">
+            </i>{{post.views}}</span>
+            <a class="comment" href="##comment" title="评论" target="_blank" >
+                <i class="glyphicon glyphicon-comment"></i>
+                {{post.comment_set.count}}
+            </a>
         </p>
         <p class="note">
 

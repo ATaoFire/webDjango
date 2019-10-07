@@ -56,7 +56,7 @@ class EmailVerifyRecord(models.Model):
 class Banner(models.Model):
     title = models.CharField('标题', max_length=50)
     #设置轮播图的路径
-    cover = models.ImageField('轮播图', upload_to = 'banner/%Y/%m/%d/')
+    cover = models.ImageField('轮播图', upload_to='banner/%Y/%m/%d/')
     link_url = models.URLField('图片链接', max_length=100)
     idx = models.IntegerField('索引')
     is_active = models.BooleanField('是否active', default=False)
@@ -94,7 +94,8 @@ class Post(models.Model):
         ('draft', '草稿'),
         ('published', '发布'),
     )
-
+    # 帖子标题，CharField数据库中会转换为VARCHAR
+    title = models.CharField(max_length=250, verbose_name="标题")
     # 作者，外键
     # 一个作者可以有多篇帖子
     # 当作者被删除，相应的帖子也会被删除
@@ -104,14 +105,13 @@ class Post(models.Model):
 
     category = models.ForeignKey(BlogCategory, on_delete=models.SET_DEFAULT, verbose_name='博客分类', default=None)
     tags = models.ManyToManyField(Tags, verbose_name='标签')
-    # 帖子标题，CharField数据库中会转换为VARCHAR
-    title = models.CharField(max_length=250, verbose_name="标题")
+
     # 正文，TextField会转换为TEXT
     body = models.TextField(verbose_name="正文")
     # 发布日期，timezone.now：以时区格式返回当前的时间
     publish = models.DateTimeField(default=timezone.now, verbose_name="发布时间")
     #封面静态文件内容
-    cover = models.ImageField('博客封面', upload_to='static/images/post', default=None)
+    cover = models.ImageField('博客封面', upload_to='post/%Y/%m/%d/', default=None)
     views = models.IntegerField('浏览数', default=0)
     recommend = models.BooleanField('推荐博客', default=False)
 

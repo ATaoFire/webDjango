@@ -12,10 +12,10 @@ urlpatterns = [
     #退出
     path('logout/', views.logout, name='logout'),
     path('list/', views.blog_list, name='blog_list'),
-    path('category/(?P<cid>[0-9]+)/$', views.blog_list, name='blog_list'),
+    # path(r'category/^(?P[0-9])/$', views.blog_list, name='blog_list'),
 
     path('search/', views.SearchView.as_view(), name='search'),
 
     path('<int:year>/<int:month>/<int:day>/<slug:post>/',
-         views.post_detail, name='post_detail')
+         views.post_detail, name='post_detail'),
 ]
