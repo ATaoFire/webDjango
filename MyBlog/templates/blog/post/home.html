@@ -69,8 +69,7 @@
                 <span class="red">【推荐】</span>
                 <a target="_blank" href="/blog/{{post.id}}/" title="{{post.title}}" >{{post.title}}</a>
             </div>
-
-        <p class="note">{{post.content}}</p>
+        <p class="note">{{post.title}}</p>
         </article>
     {% endfor %}
     <!-- 推荐结束 -->
@@ -80,29 +79,27 @@
             <h3>{{ post.title }}</h3>
             <p>作者：{{ post.author }}</p>
             <a class="focus" href="#" target="_blank" >
-                <img class="thumb" data-original="/{{post.cover}}" src="/{{post.cover}}"  style="display: inline;">
-                  <img src="https://static.runoob.com/images/mix/paris.jpg" class="float-center">
-
+                <img class="thumb" data-original="/media/{{post.cover}}" src="/media/{{post.cover}}"  style="display: inline;">
             </a>
             <blockquote class="blockquote">
                 <p>{{ post.body }}</p>
-                <a class="cat" href="#" title="{{post.category.name}}">
-                    {{post.category.name}}
-                </a>
+                <p>数据分类：
+                    <a class="cat" href="#" title="{{post.category.name}}">
+                        {{post.category.name}}
+                    </a>
+                </p>
             </blockquote>
         </div>
         <p class="meta">
-            <time class="time"><i class="glyphicon glyphicon-time"></i>{{post.pub_date|date:'Y-m-d'}}</time>
-            <span class="views"><i class="glyphicon glyphicon-eye-open">
-            </i>{{post.views}}</span>
-            <a class="comment" href="##comment" title="评论" target="_blank" >
+            <time class="time">
+                <i class="glyphicon glyphicon-time">{{publish.pub_date|date:'Y-m-d'}}</i></time>
+            <span class="views"><i class="glyphicon glyphicon-eye-open"></i>{{post.views}}</span>
+            <a class="comment" href="#" title="评论" target="_blank" >
                 <i class="glyphicon glyphicon-comment"></i>
                 {{post.comment_set.count}}
             </a>
         </p>
         <p class="note">
-
-
       {% autoescape off %}
           {{post.content | truncatechars_html:200}}
       {% endautoescape %}
@@ -111,45 +108,52 @@
     </article>
 
   {% endfor %}
-
-
-  <!-- 最新发布的博客结束 -->
+    <!-- 最新发布的博客结束 -->
     <!-- 分类 -->
     <div class="title">
-    <h3>最新发布</h3>
-    <div class="more">
-      {%for c in blogcategory_list%}              <a href="/category/{{c.id}}" title="{{c.name}}" >{{c.name}}</a>
-            {% endfor %}        </div>
-  </div>
+        <h6>最新发布</h6>
+        <div class="more">
+            {%for category in blogcategory_list%}
+                <a href="/category/{{category.id}}" title="{{category.name}}">{{category.name}}</a>
+            {% endfor %}
+        </div>
+    </div>
     <!-- 分类结束 -->
     <!-- 评论 -->
     <ul>
-
-                {% for post in new_comment_list %}
-                    <li><a title="{{ post.title }}" href="#"><span class="thumbnail">
-                <img class="thumb" data-original="/{{ post.cover }}"
-                     src="/{{ post.cover }}"
-                     alt="{{ post.title }}" style="display: block;">
-            </span><span class="text">{{ post.title }}</span><span class="muted"><i
-                            class="glyphicon glyphicon-time"></i>
-                {{ post.pub_date }}
-            </span><span class="muted"><i class="glyphicon glyphicon-eye-open"></i>{{ post.views }}</span></a></li>
-                {% endfor %}
-
-
-            </ul>
+        {% for post in new_comment_list %}
+            <li>
+                <a title="{{ post.title }}" href="#">
+                    <span class="thumbnail">
+                        <img class="thumb" data-original="/media/{{ post.cover }}"
+                             src="/media/{{ post.cover }}"
+                             alt="{{ post.title }}" style="display: block;">
+                    </span>
+                    <span class="text">{{ post.title }}</span>
+                    <span class="muted">
+                        <i class="glyphicon glyphicon-time"></i>
+                        {{ post.pub_date }}
+                    </span>
+                    <span class="muted">
+                        <i class="glyphicon glyphicon-eye-open"></i>
+                        {{ post.views }}
+                    </span>
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
     <!-- 评论结束 -->
     <!-- 友情链接 -->
     <div class="widget widget_sentence">
-            <h3>友情链接</h3>
-            <div class="widget-sentence-link">
-                {% for friendlylink in friendlylink_list %}
-
-                    <a href="{{ friendlylink.link }}" title="{{ friendlylink.title }}"
-                       target="_blank">{{ friendlylink.title }}</a>&nbsp;&nbsp;&nbsp;                {% endfor %}
-
-
-            </div>
+        <h6>友情链接</h6>
+        <div class="widget-sentence-link">
+            {% for friendlylink in friendlylink_list %}
+                <a href="{{ friendlylink.link }}" title="{{ friendlylink.title }}"
+                   target="_blank">{{ friendlylink.title }}
+                </a>&nbsp;&nbsp;&nbsp;
+            {% endfor %}
         </div>
+    </div>
+
 
 {% endblock %}
