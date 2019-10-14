@@ -21,7 +21,5 @@ app_names = 'blog'
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('blog/', include('blog.urls')),
-    #验证码
-    path('captcha', include('captcha.urls'))
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    path('', include('blog.urls')),
+]
