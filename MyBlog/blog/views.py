@@ -126,12 +126,17 @@ class SearchView(View):
     #     pass
     def post(self, request):
         kw = request.POST.get('keyword')
-        post_list = Post.objects.filter(Q(title__icontains=kw)|Q(content__icontains=kw))
 
-        ctx = {
-            'post_list': post_list
-        }
-        return render(request, 'list.html', ctx)
+        if kw:
+            post_list = Post.objects.filter(Q(title__icontains=kw)|Q(content__icontains=kw))
+            ctx = {
+                'post_list': post_list
+            }
+            return render(request, 'list.html', ctx)
+        else:
+            return render(request, 'list.html', {})
+
+
 # 视图函数 HTTPRequest
 def index(request):
     banner_list = Banner.objects.all()
@@ -150,14 +155,20 @@ def index(request):
 
     friendlylink_list = FriendlyLink.objects.all()
     tags = Tags.objects.all()
+    tag_message_list = []
+    for t in tags:
+        count = len(t.post_set.all())
+        tm = TagMessage(t.id, t.name, count)
+        tag_message_list.append(tm)
+
     ctx = {
         'banner_list': banner_list,
         'recommend_list': recommend_list,
         'post_list': post_list,
         'blogcategory_list': blogcategory_list,
-        'new_comment_list':new_comment_list1,
+        'new_comment_list': new_comment_list1,
         'friendlylink_list':friendlylink_list,
-        'tags':tags,
+        'tags': tag_message_list,
     }
     return render(request, 'index.html',  ctx)
 
@@ -188,16 +199,26 @@ def blog_list(request,cid=-1, tid=-1):
     #
     # post_list = p.page(page)
 
-    # tags = Tags.objects.all()
-    # tag_message_list = []
-    # for t in tags:
-    #     count = len(t.post_set.all())
-    #     tm = TagMessage(t.id, t.name, count)
-    #     tag_message_list.append(tm)
+    tags = Tags.objects.all()
+    tag_message_list = []
+    for t in tags:
+        count = len(t.post_set.all())
+        tm = TagMessage(t.id, t.name, count)
+        tag_message_list.append(tm)
+
+    # 进行去重，过滤
+    new_comment_list = Comment.objects.all()
+    new_comment_list1 = []
+    post_list1 = []
+    for comment in new_comment_list:
+        if comment.post.id not in post_list1:
+            new_comment_list1.append(comment)
+            post_list1.append(comment.post.id)
 
     ctx = {
         'post_list': post_list,
-        # 'tags': tag_message_list
+        'tags': tag_message_list,
+        'new_comment_list': new_comment_list1,
     }
     return render(request, 'list.html', ctx)
 

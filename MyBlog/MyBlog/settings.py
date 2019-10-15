@@ -63,6 +63,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.media',  # 将media_url上传文件路径注册到模板中
+
             ],
         },
     },
@@ -126,7 +128,7 @@ STATICFILES_DIRS = [
 ]
 #媒体
 MEDIA_URL = '/media/'
-MEDIA_ROOT= os.path.join(BASE_DIR,'media')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # 字母验证码
 CAPTCHA_IMAGE_SIZE = (80, 30)  # 设置 captcha 图片大小
