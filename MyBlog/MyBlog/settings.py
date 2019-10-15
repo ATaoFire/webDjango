@@ -125,8 +125,8 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'), #在当前目录下的static文件夹
 ]
 #媒体
-MEDIA_ROOT= os.path.join(BASE_DIR,'media')
 MEDIA_URL = '/media/'
+MEDIA_ROOT= os.path.join(BASE_DIR,'media')
 
 # 字母验证码
 CAPTCHA_IMAGE_SIZE = (80, 30)  # 设置 captcha 图片大小
@@ -143,4 +143,12 @@ CAPTCHA_TIMEOUT = 1  # 超时(minutes)
 # CAPTCHA_CHALLENGE_FUNCT = 'captcha.helpers.math_challenge'
 # CAPTCHA_TIMEOUT = 1
 
-
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.163.com'
+EMAIL_PORT = 25
+#发送邮件的邮箱
+EMAIL_HOST_USER = 'xxx'
+#在邮箱中设置的客户端授权密码
+EMAIL_HOST_PASSWORD = '123456'
+#收件人看到的发件人
+EMAIL_FROM = '知奇课堂'
