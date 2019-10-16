@@ -62,10 +62,10 @@
   {% for post in post_list%}
   <article class="excerpt excerpt-1" style="">
     <a class="focus" href="/blog/{{post.id}}/" title="{{post.title}}" target="_blank" >
-        <img class="thumb" data-original="media/{{post.cover}}" src="media/{{post.cover}}" alt="{{post.title}}"  style="display: inline;">
+        <img class="thumb" data-original="{{ MEDIA_URL }}{{post.cover}}" src="{{ MEDIA_URL }}{{post.cover}}" alt="{{post.title}}"  style="display: inline;">
     </a>
       <header>
-          <a class="cat" href="#" title="{{post.category.name}}" >
+          <a class="cat" href="category/{{ post.category.id }}" title="{{post.category.name}}" >
               {{post.category.name}}<i></i>
           </a>
             <h2>
@@ -87,7 +87,7 @@
         </p>
         <p class="note">
       {% autoescape off %}
-          {{post.content | truncatechars_html:200}}
+          {{post.content | truncatechars_html:100}}
       {% endautoescape %}
 
     </p>
@@ -95,15 +95,7 @@
 
   {% endfor %}
   <!-- 最新发布的博客结束 -->
-  <nav class="pagination" style="display: none;">
-	<ul>
-	  <li class="prev-page"></li>
-	  <li class="active"><span>1</span></li>
-	  <li><a href="?page=2">2</a></li>
-	  <li class="next-page"><a href="?page=2">下一页</a></li>
-	  <li><span>共 2 页</span></li>
-	</ul>
-  </nav>
+    {% include "_pagination.html" %}
 </div>
 </div>
 <aside class="sidebar">
@@ -126,21 +118,23 @@
 		  <span id="sitetime">88天 </span></h2>
 	  </div>
 		<div role="tabpanel" class="tab-pane contact" id="contact">
-		  <h2>QQ:
+		  <h2>QQ:583299127
 			  <a href="" target="_blank" rel="nofollow" data-toggle="tooltip" data-placement="bottom" title=""  data-original-title="QQ:"></a>
 		  </h2>
-		  <h2>Email:
+		  <h2>Email:583299127@qq.com
 		  <a href="#" target="_blank" data-toggle="tooltip" rel="nofollow" data-placement="bottom" title=""  data-original-title="#"></a></h2>
 	  </div>
 	</div>
   </div>
   <div class="widget widget_search">
-	<form class="navbar-form" action="/Search" method="post">
+	<form class="navbar-form" action="/search/" method="post">
 	  <div class="input-group">
 		<input type="text" name="keyword" class="form-control" size="35" placeholder="请输入关键字" maxlength="15" autocomplete="off">
 		<span class="input-group-btn">
 		<button class="btn btn-default btn-search" name="search" type="submit">搜索</button>
-		</span> </div>
+		</span>
+      </div>
+        {% csrf_token %}
 	</form>
   </div>
     <h3>标签云</h3>
@@ -148,22 +142,23 @@
         <ul class="plinks ptags">
             {% for tag in tags %}
                 <li>
-                    <a href="/tags/{{tag.id}}" title="{{tag.name}}" draggable="false">
+                    <a href="/tags/{{tag.tid}}" title="{{tag.name}}" draggable="false">
                         {{tag.name}}
 {#                        显示tag 所关联的文章数#}
-                        <span class="badge">{{tags.count}}</span>
+                        <span class="badge">{{tag.count}}</span>
                     </a>
                 </li>
             {% endfor %}
         </ul>
     </div>
+
 </div>
 <div class="widget widget_hot">
 	  <h3>最新评论文章</h3>
         <ul>
             {% for comment in new_comment_list %}
                 <li>
-                    <a title="{{ post.title }}" href="#">
+                <a href="/blog/{{comment.post.id}}/" title="{{comment.post.title}}" target="_blank" >
                         <span class="thumbnail">
                             <img class="thumb" data-original="media/{{ comment.post.cover }}" src="media/{{ comment.post.cover}}" alt="{{ comment.post.title }}" style="display: block;">
                         </span>

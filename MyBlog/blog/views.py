@@ -126,12 +126,17 @@ class SearchView(View):
     #     pass
     def post(self, request):
         kw = request.POST.get('keyword')
-        post_list = Post.objects.filter(Q(title__icontains=kw)|Q(content__icontains=kw))
 
-        ctx = {
-            'post_list': post_list
-        }
-        return render(request, 'list.html', ctx)
+        if kw:
+            post_list = Post.objects.filter(Q(title__icontains=kw)|Q(content__icontains=kw))
+            ctx = {
+                'post_list': post_list
+            }
+            return render(request, 'list.html', ctx)
+        else:
+            return render(request, 'list.html', {})
+
+
 # 视图函数 HTTPRequest
 def index(request):
     banner_list = Banner.objects.all()
@@ -150,14 +155,20 @@ def index(request):
 
     friendlylink_list = FriendlyLink.objects.all()
     tags = Tags.objects.all()
+    tag_message_list = []
+    for t in tags:
+        count = len(t.post_set.all())
+        tm = TagMessage(t.id, t.name, count)
+        tag_message_list.append(tm)
+
     ctx = {
         'banner_list': banner_list,
         'recommend_list': recommend_list,
         'post_list': post_list,
         'blogcategory_list': blogcategory_list,
-        'new_comment_list':new_comment_list1,
+        'new_comment_list': new_comment_list1,
         'friendlylink_list':friendlylink_list,
-        'tags':tags,
+        'tags': tag_message_list,
     }
     return render(request, 'index.html',  ctx)
 
@@ -169,6 +180,30 @@ class TagMessage(object):
         self.count = count
 
 def blog_list(request,cid=-1, tid=-1):
+
+    """
+    分页器的使用
+    book_list = Book.objects.all()
+    paginator = Paginator(book_list, 10)
+    print("count:", paginator.count)  # 总数居
+    print("num_pages", paginator.num_pages)  # 总页数
+    print("page_range", paginator.page_range)  # 页面的列表
+
+    page_one = paginator.page(1)  # 第一页的page对象
+    for i in range(page_one):  # 遍历第1页的所有数据对象
+        print(i)
+    print(page_one.object_list)  # 第1页所有数据
+
+    page_two = paginator.page(2)
+    print(page_two.has_next())  # 是否有下一页
+    print(page_two.next_page_number())  # 下一页的页码
+    print(page_two.has_previous())  # 是否有上一页
+    print(page_two.previous_page_number())  # 上一页的页码
+
+    # 抛出错误
+    page = paginator.page(12)  # Error:EmptyPage
+    page = paginator.page("z")  # Error:PageNotAnInteger
+    """
     post_list = None
     if cid != -1:
         cat = BlogCategory.objects.get(id=cid)
@@ -179,25 +214,36 @@ def blog_list(request,cid=-1, tid=-1):
     else:
         post_list = Post.objects.all()
 
-    # try:
-    #     page = request.GET.get('page', 1)
-    # except PageNotAnInteger:
-    #     page = 1
-    #
-    # p = Paginator(post_list, per_page=1, request=request)
-    #
-    # post_list = p.page(page)
+    #进行分页
+    paginator = Paginator(post_list, 10)
+    page = request.GET.get("page", 1)
+    current_page = int(page)
+    # post_list = paginator.page(current_page)  # 显示第1页的内容
 
-    # tags = Tags.objects.all()
-    # tag_message_list = []
-    # for t in tags:
-    #     count = len(t.post_set.all())
-    #     tm = TagMessage(t.id, t.name, count)
-    #     tag_message_list.append(tm)
+
+    tags = Tags.objects.all()
+    tag_message_list = []
+    for t in tags:
+        count = len(t.post_set.all())
+        tm = TagMessage(t.id, t.name, count)
+        tag_message_list.append(tm)
+
+    # 进行去重，过滤
+    new_comment_list = Comment.objects.all()
+    new_comment_list1 = []
+    post_list1 = []
+    for comment in new_comment_list:
+        if comment.post.id not in post_list1:
+            new_comment_list1.append(comment)
+            post_list1.append(comment.post.id)
 
     ctx = {
         'post_list': post_list,
-        # 'tags': tag_message_list
+        'tags': tag_message_list,
+        'new_comment_list': new_comment_list1,
+        "page_range": paginator.page_range,
+        "paginator": paginator,
+        "current_page": current_page
     }
     return render(request, 'list.html', ctx)
 
