@@ -214,12 +214,23 @@ def blog_list(request,cid=-1, tid=-1):
     else:
         post_list = Post.objects.all()
 
+<<<<<<< HEAD
     #进行分页
     paginator = Paginator(post_list, 10)
     page = request.GET.get("page", 1)
     current_page = int(page)
     # post_list = paginator.page(current_page)  # 显示第1页的内容
 
+=======
+    # try:
+    #     page = request.GET.get('page', 1)
+    # except PageNotAnInteger:
+    #     page = 1
+    #
+    # p = Paginator(post_list, per_page=1, request=request)
+    #
+    # post_list = p.page(page)
+>>>>>>> 7b71495aac1cd0257a6a3e3e3cf79147f96be96f
 
     tags = Tags.objects.all()
     tag_message_list = []
@@ -241,9 +252,12 @@ def blog_list(request,cid=-1, tid=-1):
         'post_list': post_list,
         'tags': tag_message_list,
         'new_comment_list': new_comment_list1,
+<<<<<<< HEAD
         "page_range": paginator.page_range,
         "paginator": paginator,
         "current_page": current_page
+=======
+>>>>>>> 7b71495aac1cd0257a6a3e3e3cf79147f96be96f
     }
     return render(request, 'list.html', ctx)
 
